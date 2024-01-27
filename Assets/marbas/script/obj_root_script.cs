@@ -11,6 +11,7 @@ public class obj_root_script : MonoBehaviour
     [SerializeField] private CinemachineDollyCart[] obj_script;
     int tmp_count;
     [SerializeField] float miss_time;
+    bool miss_bool;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,12 +24,16 @@ public class obj_root_script : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("miss");
 
-        StartCoroutine("miss_count");
+        if (!miss_bool)
+        {
+            Debug.Log("miss");
+            StartCoroutine("miss_count");
+        }
     }
     IEnumerator miss_count()
     {
+        miss_bool = true;
         float tmp = obj_script[0].m_Speed;
         for (int i=0; i < tmp_count; i++)
         {
@@ -40,5 +45,6 @@ public class obj_root_script : MonoBehaviour
         {
             obj_script[i].m_Speed = tmp;
         }
+        miss_bool = false;
     }
 }
