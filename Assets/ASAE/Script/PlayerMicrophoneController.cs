@@ -15,6 +15,7 @@ public class PlayerMicrophoneController : MonoBehaviour
     [SerializeField, Range(10, 100)] private float m_AmpGain = 10;
 
     private Rigidbody palyerRigid;
+    private Animator playerAnimator;
 
     private int playerJumpcount = 0;
     private int playerMaxjumpCount = 3;
@@ -28,6 +29,11 @@ public class PlayerMicrophoneController : MonoBehaviour
     void Start()
     {
         palyerRigid = this.GetComponent<Rigidbody>();
+        playerAnimator = this.GetComponent<Animator>();
+
+        //ゲーム中は走りモーション
+        playerAnimator.SetTrigger("run");
+
         string targetDevice = "";
 
         foreach (var device in Microphone.devices)
@@ -63,12 +69,13 @@ public class PlayerMicrophoneController : MonoBehaviour
         //一定の音量の強さからジャンプする
         if(1 + m_AmpGain * m_AudioLevel >= 1.6f)
         {
-            Debug.Log("Jump!");
+         //   Debug.Log("Jump!");
             //次のフレームで実行されないようにキャッシュを更新
             palyerRigid.AddForce(transform.up * (5 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
             isFlagCache = !isFlagCache;
             if (playerJumpcount < playerMaxjumpCount-1)
             {
+                playerAnimator.SetTrigger("jamp");
                 Invoke("ResetFlag", 0.3f);
                 playerJumpcount++;
             }
@@ -77,7 +84,7 @@ public class PlayerMicrophoneController : MonoBehaviour
         else
         {
             m_Cube.transform.localScale = new Vector3(1, 1 + m_AmpGain * m_AudioLevel, 1);
-            Debug.Log(1 + m_AmpGain * m_AudioLevel);
+           // Debug.Log(1 + m_AmpGain * m_AudioLevel);
         }
         
        
@@ -96,6 +103,7 @@ public class PlayerMicrophoneController : MonoBehaviour
        
         if (collision.gameObject.tag == "Ground" && playerJumpcount > 0)
         {
+            playerAnimator.SetTrigger("randing");
             playerJumpcount = 0;
             isFlagCache = false;
         }

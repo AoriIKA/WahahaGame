@@ -11,6 +11,8 @@ public class DictationScript : MonoBehaviour
     [SerializeField]
     private Text m_Recognitions;
 
+    [SerializeField] private SkinnedMeshRenderer blendShapeProxy;
+
     private string sHypotheses;
     private string sRecognitions;
 
@@ -18,12 +20,18 @@ public class DictationScript : MonoBehaviour
 
     void Start()
     {
+        blendShapeProxy.SetBlendShapeWeight(5,100);
         m_DictationRecognizer = new DictationRecognizer();
 
-        /*m_DictationRecognizer.DictationResult += (text, confidence) =>
+      /* m_DictationRecognizer.DictationResult += (text, confidence) =>
         {
             Debug.LogFormat("Dictation result: {0}", text);
             m_Recognitions.text += text + "\n";
+            if (m_Hypotheses.text.Length >= 4)
+            {
+                m_Hypotheses.text = "";
+
+            }
         };*/
 
         m_DictationRecognizer.DictationHypothesis += (text) =>
