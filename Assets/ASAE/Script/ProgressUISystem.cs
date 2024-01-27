@@ -16,14 +16,14 @@ public class ProgressUISystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxProgress = 27.2f;
+        maxProgress = 32f;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (progressObject.position.y > maxProgress + 1) {
+        if (progressObject.position.y <= maxProgress + 1) {
             GameInProgress();
         }
         else
@@ -37,7 +37,7 @@ public class ProgressUISystem : MonoBehaviour
     {
         if (progressObject.position.y > maxProgress + 1) return;
         progress = progressObject.position.y / maxProgress;
-        Debug.Log(progress * 100 + "%");
+      //  Debug.Log(progress * 100 + "%");
         progressObject.Translate(0,progressSpeed*Time.deltaTime, 0);
     }
 }

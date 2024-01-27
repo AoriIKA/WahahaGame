@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject titleUIObject;
+    [SerializeField]
+    private GameObject seyWahahaUIObject;
+
+    [SerializeField]
+    private GameObject creditUIObject;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +23,6 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+
 }

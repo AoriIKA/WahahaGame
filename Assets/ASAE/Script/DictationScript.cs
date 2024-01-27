@@ -36,7 +36,7 @@ public class DictationScript : MonoBehaviour
 
         m_DictationRecognizer.DictationHypothesis += (text) =>
         {
-            Debug.LogFormat("Dictation hypothesis: {0}", text);
+          //  Debug.LogFormat("Dictation hypothesis: {0}", text);
             m_Hypotheses.text += text;
             if (m_Hypotheses.text.Length >= 4)
             {
