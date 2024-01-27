@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerMicrophoneController : MonoBehaviour
 {
 
+    [SerializeField]
+    GameManager gamemScript=null;
     [SerializeField] private string m_DeviceName;
     private AudioClip m_AudioClip;
     private int m_LastAudioPos;
@@ -112,6 +114,7 @@ public class PlayerMicrophoneController : MonoBehaviour
                     Invoke("ResetFlag", 0.3f);
                     Invoke("ChangeFallPlayerGravity", 1f);
                     playerJumpcount++;
+                    gamemScript.SetTutorialJumpCount();
                 }
 
             }

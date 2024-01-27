@@ -20,7 +20,7 @@ public class DictationScript : MonoBehaviour
 
     void Start()
     {
-        blendShapeProxy.SetBlendShapeWeight(5,100);
+       
         m_DictationRecognizer = new DictationRecognizer();
 
       /* m_DictationRecognizer.DictationResult += (text, confidence) =>
