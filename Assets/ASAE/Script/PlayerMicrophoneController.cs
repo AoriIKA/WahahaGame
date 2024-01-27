@@ -21,6 +21,7 @@ public class PlayerMicrophoneController : MonoBehaviour
 
     [SerializeField]
     private bool isPlayOneshot = true;//一回だけ処理する際に都度更新する
+    [SerializeField]
     private bool isFlagCache = false;
 
     //マイクデバイスを設定語オーディオクリップに反映
@@ -48,10 +49,7 @@ public class PlayerMicrophoneController : MonoBehaviour
         PlayerSpeakingJanp();
     }
 
-    private void FixedUpdate()
-    {
-       // if (Input.GetKeyDown(KeyCode.K)) palyerRigid.AddForce(transform.up * (3 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
-    }
+
 
     void PlayerSpeakingJanp()
     {
@@ -89,8 +87,8 @@ public class PlayerMicrophoneController : MonoBehaviour
 
     private void ResetFlag()
     {
-        
-        isPlayOneshot = !isPlayOneshot;
+
+        isFlagCache = !isFlagCache;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -99,7 +97,7 @@ public class PlayerMicrophoneController : MonoBehaviour
         if (collision.gameObject.tag == "Ground" && playerJumpcount > 0)
         {
             playerJumpcount = 0;
-            isPlayOneshot = !isPlayOneshot;
+            isFlagCache = false;
         }
     }
 
