@@ -8,6 +8,7 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 public class obj_root_script : MonoBehaviour
 {
     [SerializeField] private float obj_miss_speed;
+    [SerializeField]private float dollyCartSpeed=8;
     [SerializeField] private CinemachineDollyCart[] obj_script;
     int tmp_count;
     [SerializeField] float miss_time;
@@ -16,6 +17,27 @@ public class obj_root_script : MonoBehaviour
     void Start()
     {
         tmp_count = obj_script.Length;
+
+        //最初は速度を0にして止めておく
+        StopDollyCart();
+    }
+
+    //外部から起動をかけられるように
+    public void StartDollyCaet()
+    {
+        for (int i = 0; i < tmp_count; i++)
+        {
+            obj_script[i].m_Speed = dollyCartSpeed;
+        }
+    }
+
+    //カートの速度を0に
+    public void StopDollyCart()
+    {
+        for (int i = 0; i < tmp_count; i++)
+        {
+            obj_script[i].m_Speed = 0;
+        }
     }
 
     // Update is called once per frame

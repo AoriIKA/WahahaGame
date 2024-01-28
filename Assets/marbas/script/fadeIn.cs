@@ -12,6 +12,7 @@ public class fadeIn : MonoBehaviour
     float time = 1f;
     private void Start()
     {
+        NextScene();
         DontDestroyOnLoad(this.gameObject);
     }
     public void NextScene()
@@ -24,7 +25,7 @@ public class fadeIn : MonoBehaviour
 
         fade.FadeIn(time);
         yield return new WaitForSeconds(1.0f);
-        SceneManager.LoadScene("Test_marbas_2");
+        SceneManager.LoadScene(0);
         fade.FadeOut(time);
     }
 }

@@ -71,6 +71,8 @@ public class PlayerMicrophoneController : MonoBehaviour
 
         }
 
+        Debug.Log(playerJumpcount);
+
     }
 
 
@@ -94,10 +96,10 @@ public class PlayerMicrophoneController : MonoBehaviour
             if (1 + m_AmpGain * m_AudioLevel >= 1.6f )
             {
                 palyerRigid.velocity = Vector3.zero;
+
+                Physics.gravity = new Vector3(0, -9.81f, 0);
+                palyerRigid.AddForce(transform.up * (12 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
                 //次のフレームで実行されないようにキャッシュを更新
-
-               palyerRigid.AddForce(transform.up * (12 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
-
                 isFlagCache = !isFlagCache;
 
                 if (palyerRigid.velocity.y < 0)
@@ -106,12 +108,12 @@ public class PlayerMicrophoneController : MonoBehaviour
                 }
 
 
-                if (playerJumpcount < playerMaxjumpCount - 1)
+                if (playerJumpcount < playerMaxjumpCount)
                 {
                     Physics.gravity = new Vector3(0, -9.81f, 0);
 
                     playerAnimator.SetTrigger("jamp");
-                    Invoke("ResetFlag", 0.3f);
+                    Invoke("ResetFlag", 0.2f);
                     Invoke("ChangeFallPlayerGravity", 1f);
                     playerJumpcount++;
                     gamemScript.SetTutorialJumpCount();

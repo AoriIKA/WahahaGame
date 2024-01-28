@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private SpriteRenderer[] titleUIImages = new SpriteRenderer[0];
     [SerializeField]
     private GameObject progressObject = null;
+    [SerializeField]
+    private obj_root_script dollyCartmanager;
 
     private int tutorialJumpCount = 0;
 
@@ -26,6 +28,7 @@ public class GameManager : MonoBehaviour
             for (int i=0;i<titleUIImages.Length-1;i++) {
                 titleUIImages[i].gameObject.SetActive(false);
             }
+            dollyCartmanager.StartDollyCaet();
             progressObject.SetActive(true);
         }
     }
