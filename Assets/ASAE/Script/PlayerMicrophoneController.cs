@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerMicrophoneController : MonoBehaviour
 {
 
+    [SerializeField]
+    GameManager gamemScript=null;
     [SerializeField] private string m_DeviceName;
     private AudioClip m_AudioClip;
     private int m_LastAudioPos;
@@ -25,11 +27,19 @@ public class PlayerMicrophoneController : MonoBehaviour
     [SerializeField]
     private bool isFlagCache = false;
 
+    [SerializeField]
+    bool isDebug = false;
+    [SerializeField]
+    float  DebugSpeed = 15;
+
     //マイクデバイスを設定語オーディオクリップに反映
     void Start()
     {
         palyerRigid = this.GetComponent<Rigidbody>();
         playerAnimator = this.GetComponent<Animator>();
+
+       
+
 
         //ゲーム中は走りモーション
         playerAnimator.SetTrigger("run");
@@ -53,39 +63,70 @@ public class PlayerMicrophoneController : MonoBehaviour
     void Update()
     {
         PlayerSpeakingJanp();
+        if (Input.GetKeyDown(KeyCode.Space) && isDebug)
+        {
+            Physics.gravity = new Vector3(0, -9.81f, 0);
+            palyerRigid.AddForce(transform.up * DebugSpeed, ForceMode.Impulse);
+            Invoke("ChangeFallPlayerGravity", 1f);
+
+        }
+
     }
 
 
 
     void PlayerSpeakingJanp()
     {
+        this.transform.eulerAngles = new Vector3(0, this.transform.eulerAngles.y, 0);
+
         float[] waveData = GetUpdatedAudio();
         if (waveData.Length == 0) return;
 
         m_AudioLevel = waveData.Average(Mathf.Abs);
 
-        if (isFlagCache == isPlayOneshot) return;//フラグに差異がない場合はここで処理を終了する
-        
-        //一定の音量の強さからジャンプする
-        if(1 + m_AmpGain * m_AudioLevel >= 1.6f)
-        {
-         //   Debug.Log("Jump!");
-            //次のフレームで実行されないようにキャッシュを更新
-            palyerRigid.AddForce(transform.up * (5 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
-            isFlagCache = !isFlagCache;
-            if (playerJumpcount < playerMaxjumpCount-1)
-            {
-                playerAnimator.SetTrigger("jamp");
-                Invoke("ResetFlag", 0.3f);
-                playerJumpcount++;
-            }
 
-        }
-        else
+   
+        if (isFlagCache == isPlayOneshot) return;//フラグに差異がない場合はここで処理を終了する
+
+        if (!isDebug)
         {
-            m_Cube.transform.localScale = new Vector3(1, 1 + m_AmpGain * m_AudioLevel, 1);
-           // Debug.Log(1 + m_AmpGain * m_AudioLevel);
+            //一定の音量の強さからジャンプする
+            if (1 + m_AmpGain * m_AudioLevel >= 1.6f )
+            {
+                palyerRigid.velocity = Vector3.zero;
+                //次のフレームで実行されないようにキャッシュを更新
+
+               palyerRigid.AddForce(transform.up * (12 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
+
+                isFlagCache = !isFlagCache;
+
+                if (palyerRigid.velocity.y < 0)
+                {
+                    ChangeFallPlayerGravity();
+                }
+
+
+                if (playerJumpcount < playerMaxjumpCount - 1)
+                {
+                    Physics.gravity = new Vector3(0, -9.81f, 0);
+
+                    playerAnimator.SetTrigger("jamp");
+                    Invoke("ResetFlag", 0.3f);
+                    Invoke("ChangeFallPlayerGravity", 1f);
+                    playerJumpcount++;
+                    gamemScript.SetTutorialJumpCount();
+                }
+
+            }
+            else
+            {
+                m_Cube.transform.localScale = new Vector3(1, 1 + m_AmpGain * m_AudioLevel, 1);
+
+            }
         }
+
+
+       
         
        
 
@@ -96,13 +137,21 @@ public class PlayerMicrophoneController : MonoBehaviour
     {
 
         isFlagCache = !isFlagCache;
+       
+    }
+
+    void ChangeFallPlayerGravity()
+    {
+        
+        Physics.gravity = new Vector3(0, -100, 0);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
        
-        if (collision.gameObject.tag == "Ground" && playerJumpcount > 0)
+        if (collision.gameObject.tag == "Ground")
         {
+            Physics.gravity = new Vector3(0, -9.81f, 0);
             playerAnimator.SetTrigger("randing");
             playerJumpcount = 0;
             isFlagCache = false;

@@ -6,12 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/ASAE/Scene/Test.unity
-    guid: 13bde55584479fe4f9b3db144e5cc72f
-  - enabled: 1
-    path: Assets/marbas/Test_marbas.unity
-    guid: 1bf2b4f681893cd4194b362838cdacc0
-  - enabled: 1
-    path: Assets/marbas/Test_marbas_2.unity
-    guid: e9b94c2d58401d34fb699ebaec00836f
+    path: Assets/ASAE/Scene/MainGame.unity
+    guid: 0ee984b730ac8714fa7d26559754d095
   m_configObjects: {}
