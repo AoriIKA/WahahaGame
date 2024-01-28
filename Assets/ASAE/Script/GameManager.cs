@@ -12,10 +12,12 @@ public class GameManager : MonoBehaviour
     private GameObject progressObject = null;
     [SerializeField]
     private obj_root_script dollyCartmanager;
+    [SerializeField]
+    private PlayerMicrophoneController playerScript;
 
     private int tutorialJumpCount = 0;
 
-   
+    public bool isGamePlay = false;
     private bool isPlayOneshot = true;//ˆê‰ñ‚¾‚¯ˆ—‚·‚éÛ‚É“s“xXV‚·‚é
    
     private bool isFlagCache = false;
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour
             for (int i=0;i<titleUIImages.Length-1;i++) {
                 titleUIImages[i].gameObject.SetActive(false);
             }
+            isGamePlay = true;
+            playerScript.playerAnimator.SetTrigger("run");
             dollyCartmanager.StartDollyCaet();
             progressObject.SetActive(true);
         }

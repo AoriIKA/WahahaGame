@@ -1,14 +1,19 @@
 using System;
 using System.Linq;
 using UnityEngine;
-
+using DG.Tweening;
 
 public class PlayerMicrophoneController : MonoBehaviour
 {
-
+    [SerializeField] private SkinnedMeshRenderer blendShapeProxy;
     [SerializeField]
     GameManager gamemScript=null;
+    [SerializeField]
+    ProgressUISystem progressUISystemScript  = null;
     [SerializeField] private string m_DeviceName;
+
+    [SerializeField]
+    GameObject[] wahahaImageObjects = new GameObject[0];
     private AudioClip m_AudioClip;
     private int m_LastAudioPos;
     private float m_AudioLevel;
@@ -17,7 +22,7 @@ public class PlayerMicrophoneController : MonoBehaviour
     [SerializeField, Range(10, 100)] private float m_AmpGain = 10;
 
     private Rigidbody palyerRigid;
-    private Animator playerAnimator;
+    public Animator playerAnimator;
 
     private int playerJumpcount = 0;
     private int playerMaxjumpCount = 3;
@@ -36,7 +41,7 @@ public class PlayerMicrophoneController : MonoBehaviour
     void Start()
     {
         palyerRigid = this.GetComponent<Rigidbody>();
-        playerAnimator = this.GetComponent<Animator>();
+     
 
        
 
@@ -79,6 +84,7 @@ public class PlayerMicrophoneController : MonoBehaviour
 
     void PlayerSpeakingJanp()
     {
+        float faceBlend = 0;
         this.transform.eulerAngles = new Vector3(0, this.transform.eulerAngles.y, 0);
 
         float[] waveData = GetUpdatedAudio();
@@ -99,6 +105,20 @@ public class PlayerMicrophoneController : MonoBehaviour
 
                 Physics.gravity = new Vector3(0, -9.81f, 0);
                 palyerRigid.AddForce(transform.up * (12 + m_AmpGain * m_AudioLevel), ForceMode.Impulse);
+
+                if(playerJumpcount < wahahaImageObjects.Length) wahahaImageObjects[playerJumpcount].SetActive(true);
+
+                for (int i = 0; i < 6; i++) { blendShapeProxy.SetBlendShapeWeight(i, 0); }
+                blendShapeProxy.SetBlendShapeWeight(5, 100);
+                blendShapeProxy.SetBlendShapeWeight(1, 100);
+                //DOTween.To(
+                //    () => faceBlend,          // 何を対象にするのか
+                //    num => faceBlend = num,   // 値の更新
+                //    100,                  // 最終的な値
+                //    1.0f                  // アニメーション時間
+                //);
+
+
                 //次のフレームで実行されないようにキャッシュを更新
                 isFlagCache = !isFlagCache;
 
@@ -153,11 +173,20 @@ public class PlayerMicrophoneController : MonoBehaviour
        
         if (collision.gameObject.tag == "Ground")
         {
+            for (int i = 0; i < 6; i++) { blendShapeProxy.SetBlendShapeWeight(i, 0); }
+
+            for (int i = 0; i < wahahaImageObjects.Length; i++) { wahahaImageObjects[i].SetActive(false); }
             Physics.gravity = new Vector3(0, -9.81f, 0);
             playerAnimator.SetTrigger("randing");
             playerJumpcount = 0;
             isFlagCache = false;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        progressUISystemScript.PlayerHitObstaclEvent();
+        Camera.main.transform.DOShakePosition(1);
     }
 
     private float[] GetUpdatedAudio()

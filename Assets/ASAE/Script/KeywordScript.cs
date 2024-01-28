@@ -11,6 +11,8 @@ public class KeywordScript : MonoBehaviour
     private GameManager gameManagerScript=null;
     [SerializeField] private SkinnedMeshRenderer blendShapeProxy;
     [SerializeField]
+    private obj_root_script dollyCartmanager;
+    [SerializeField]
     private string[] m_Keywords;
 
     [SerializeField]
@@ -53,14 +55,17 @@ public class KeywordScript : MonoBehaviour
 
     private void Update()
     {
-        if (playerSeyKeywordsText.text == "‚¬‚Ô" || playerSeyKeywordsText.text == "‚¬‚Ô‚ ‚Á‚Õ")
+        if (gameManagerScript.isGamePlay)
         {
-            if (!isOneShot)
+            if (playerSeyKeywordsText.text == "‚¬‚Ô" || playerSeyKeywordsText.text == "‚¬‚Ô‚ ‚Á‚Õ")
             {
-                GameOverEvent();
-                isOneShot = true;
+                if (!isOneShot)
+                {
+                    GameOverEvent();
+                    isOneShot = true;
+                }
+
             }
-         
         }
 
         if (playerSeyKeywordsText.text == "‚­‚ê‚¶‚Á‚Æ")
@@ -86,6 +91,7 @@ public class KeywordScript : MonoBehaviour
         for (int i = 0; i < 6; i++) { blendShapeProxy.SetBlendShapeWeight(i, 0); }
         blendShapeProxy.SetBlendShapeWeight(6, 100);
 
+        dollyCartmanager.StopDollyCart();
         gameOverImageObject.transform.DOMove(Vector3.zero,1);
         Invoke("ReLoadMainGame",2f);
     }

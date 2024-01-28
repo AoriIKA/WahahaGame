@@ -7,6 +7,8 @@ public class ProgressUISystem : MonoBehaviour
 {
     [SerializeField]
     Transform gameClearUIObject = null;
+    [SerializeField]
+    private obj_root_script dollyCartmanager;
     [SerializeField] private SkinnedMeshRenderer blendShapeProxy;
     [SerializeField, Range(1.0f, 100.0f)]
     public float progress;
@@ -16,6 +18,19 @@ public class ProgressUISystem : MonoBehaviour
     private Transform progressObject;
     [SerializeField]
     private float progressSpeed;
+
+    [SerializeField]
+    GameObject bearObject;
+    [SerializeField]
+    GameObject playerObject;
+
+    [SerializeField]
+    private float gageStopTime = 3;
+
+    float timer = 0;
+    float second = 3;
+    float remaining = 0;
+    bool isStop = false;
 
     bool isOneShot = false;
     // Start is called before the first frame update
@@ -27,21 +42,43 @@ public class ProgressUISystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (progressObject.position.y <= maxProgress + 1)
+        if (!isStop)
         {
-            GameInProgress();
+            if (progressObject.position.y <= maxProgress + 1)
+            {
+                GameInProgress();
+            }
+            else
+            {
+                //ゲームクリア処理
+                if (!isOneShot)
+                {
+                    GameClearEvent();
+                    isOneShot = true;
+                }
+            }
         }
         else
         {
-            //ゲームクリア処理
-            if (!isOneShot)
-            {
-                GameClearEvent();
-                isOneShot = true;
-            }
+            timer +=  Time.deltaTime; ;
+            remaining = second - timer;
+            Debug.Log(remaining);
+            if (remaining <= 0) ResetStopFlag();
         }
 
+    }
+
+    public void PlayerHitObstaclEvent()
+    {
+        isStop = true;
+        timer = 0;
+        remaining = gageStopTime;
+       
+    }
+
+    void ResetStopFlag()
+    {
+        isStop = false;
     }
 
     void GameInProgress()
@@ -58,7 +95,10 @@ public class ProgressUISystem : MonoBehaviour
         for (int i = 0; i < 6; i++) { blendShapeProxy.SetBlendShapeWeight(i, 0); }
         blendShapeProxy.SetBlendShapeWeight(5, 100);
         blendShapeProxy.SetBlendShapeWeight(1, 100);
+        bearObject.SetActive(true);
+        playerObject.transform.eulerAngles = new Vector3(0,180,0);
 
+        dollyCartmanager.StopDollyCart();
         gameClearUIObject.transform.DOMove(Vector3.zero, 1);
         Invoke("ReLoadMainGame", 2f);
     }
