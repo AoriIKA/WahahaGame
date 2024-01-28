@@ -10,6 +10,8 @@ public class ProgressUISystem : MonoBehaviour
     [SerializeField]
     private obj_root_script dollyCartmanager;
     [SerializeField] private SkinnedMeshRenderer blendShapeProxy;
+    [SerializeField]
+    PlayerMicrophoneController playerScript;
     [SerializeField, Range(1.0f, 100.0f)]
     public float progress;
 
@@ -98,9 +100,10 @@ public class ProgressUISystem : MonoBehaviour
         bearObject.SetActive(true);
         playerObject.transform.eulerAngles = new Vector3(0,180,0);
 
+        playerScript.MicrophoneEnd();
         dollyCartmanager.StopDollyCart();
         gameClearUIObject.transform.DOMove(Vector3.zero, 1);
-        Invoke("ReLoadMainGame", 2f);
+        Invoke("ReLoadMainGame", 15f);
     }
 
     void ReLoadMainGame()

@@ -37,6 +37,8 @@ public class PlayerMicrophoneController : MonoBehaviour
     [SerializeField]
     float  DebugSpeed = 15;
 
+    string targetDevice;
+
     //マイクデバイスを設定語オーディオクリップに反映
     void Start()
     {
@@ -49,7 +51,7 @@ public class PlayerMicrophoneController : MonoBehaviour
         //ゲーム中は走りモーション
         playerAnimator.SetTrigger("run");
 
-        string targetDevice = "";
+         targetDevice = "";
 
         foreach (var device in Microphone.devices)
         {
@@ -63,6 +65,11 @@ public class PlayerMicrophoneController : MonoBehaviour
 
         Debug.Log($"=== Device Set: {targetDevice} ===");
         m_AudioClip = Microphone.Start(targetDevice, true, 10, 48000);
+    }
+
+    public void MicrophoneEnd()
+    {
+        Microphone.End(targetDevice);
     }
 
     void Update()
