@@ -2120,7 +2120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gamemScript: {fileID: 2146338635}
-  m_DeviceName: 
+  m_DeviceName: "\u30DE\u30A4\u30AF\u914D\u5217 (\u30C7\u30B8\u30BF\u30EB\u30DE\u30A4\u30AF\u5411\u3051\u30A4\u30F3\u30C6\u30EB\xAE
+    \u30B9\u30DE\u30FC\u30C8\u30FB\u30B5\u30A6\u30F3\u30C9\u30FB\u30C6\u30AF\u30CE\u30ED\u30B8\u30FC)"
   m_Cube: {fileID: 2031508952}
   m_AmpGain: 10
   isPlayOneshot: 1
